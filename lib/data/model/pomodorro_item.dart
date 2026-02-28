@@ -1,5 +1,5 @@
 class PomodorroItem {
-  final String id;
+  final int id;
   final String title;
   final int concentrationMinutes;
   final int relaxationMinutes;
