@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:pomodorro/presentation/base_bloc.dart';
 import 'package:pomodorro/data/model/pomodorro_item.dart';
 import 'package:pomodorro/repository/pom_repository.dart';

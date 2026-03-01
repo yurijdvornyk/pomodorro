@@ -3,5 +3,5 @@ import 'package:pomodorro/presentation/pomodorro_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const PomodorroApp());
+  runApp(PomodorroApp());
 }

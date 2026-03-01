@@ -58,17 +58,11 @@ class _CreatePageState extends State<CreatePage> {
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              gap: 16,
               children: [
+                ElevatedButton(onPressed: () {}, child: const Text('Save')),
                 ElevatedButton(
                   onPressed: () {},
-                  child: const Text('Save'),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   child: const Text('Remove'),
                 ),
               ],

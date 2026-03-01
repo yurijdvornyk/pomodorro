@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
-import 'package:pomodorro/presentation/widgets/home_card.dart';
+import 'package:pomodorro/presentation/home/home_card.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required homeBloc}) : _homeBloc = homeBloc;
+  const HomePage({super.key, required HomeBloc homeBloc})
+    : _homeBloc = homeBloc;
 
   final HomeBloc _homeBloc;
 
@@ -33,15 +34,64 @@ class _HomePageState extends State<HomePage> {
               } else if (state.pomodorros.isEmpty) {
                 return Text("No pomodorros. Let's create one!");
               }
-              return ListView.builder(
-                itemCount: state.pomodorros.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return HomeCard(
-                    title: state.pomodorros[index].title,
-                    onTap: () {},
-                  );
-                },
+              return SizedBox(
+                height: 200,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(state.pomodorros.length * 2 - 1, (
+                      index,
+                    ) {
+                      if (index.isEven) {
+                        final itemIndex = index ~/ 2;
+                        return HomeCard(
+                          pomodorroItem: state.pomodorros[itemIndex],
+                          onTap: (item) {
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 200),
+                                pageBuilder: (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                ) {
+                                  return Scaffold(
+                                    appBar: AppBar(title: Text(item.title)),
+                                    body: Center(
+                                      child: Text("Details for ${item.title}"),
+                                    ),
+                                  );
+                                },
+                                transitionsBuilder: (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) {
+                                  return ScaleTransition(
+                                    scale: Tween<double>(
+                                      begin: 0,
+                                      end: 1,
+                                    ).animate(
+                                      CurvedAnimation(
+                                        parent: animation,
+                                        curve: Curves.easeOutBack,
+                                      ),
+                                    ),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return SizedBox(width: 20);
+                      }
+                    }),
+                  ),
+                ),
               );
             },
           ),
