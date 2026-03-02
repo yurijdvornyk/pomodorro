@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomodorro/presentation/create/create_page.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/presentation/home/home_card.dart';
 
@@ -50,35 +51,28 @@ class _HomePageState extends State<HomePage> {
                           onTap: (item) {
                             Navigator.of(context).push(
                               PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 200),
-                                pageBuilder: (
-                                  context,
-                                  animation,
-                                  secondaryAnimation,
-                                ) {
-                                  return Scaffold(
-                                    appBar: AppBar(title: Text(item.title)),
-                                    body: Center(
-                                      child: Text("Details for ${item.title}"),
-                                    ),
-                                  );
-                                },
+                                pageBuilder:
+                                    (ctx, animation, secondaryAnimation) =>
+                                        const CreatePage(),
                                 transitionsBuilder: (
-                                  context,
+                                  ctx,
                                   animation,
                                   secondaryAnimation,
                                   child,
                                 ) {
-                                  return ScaleTransition(
-                                    scale: Tween<double>(
-                                      begin: 0,
-                                      end: 1,
-                                    ).animate(
-                                      CurvedAnimation(
-                                        parent: animation,
-                                        curve: Curves.easeOutBack,
-                                      ),
-                                    ),
+                                  final tween = Tween<Offset>(
+                                    begin: const Offset(
+                                      0,
+                                      1,
+                                    ), // start just below the screen
+                                    end: Offset.zero,
+                                  );
+                                  final offsetAnimation = animation
+                                      .drive(CurveTween(curve: Curves.ease))
+                                      .drive(tween);
+
+                                  return SlideTransition(
+                                    position: offsetAnimation,
                                     child: child,
                                   );
                                 },

@@ -1,0 +1,23 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Tomato Body -->
+<path d="M256 120C150 120 80 180 80 290C80 400 160 460 256 460C352 460 432 400 432 290C432 180 362 120 256 120Z" fill="#D64D4D"/>
+
+<!-- Tomato Stem / Leaves -->
+
+<path d="M256 135L275 80L330 90L285 125L320 150L256 135Z" fill="#58A36B"/>
+<path d="M256 135L237 80L182 90L227 125L192 150L256 135Z" fill="#58A36B"/>
+<path d="M256 135V60L280 110L256 135Z" fill="#58A36B"/>
+
+<!-- Stylized Double 'rr' in Negative Space -->
+
+<!-- First 'r' -->
+
+<path d="M190 360V260C190 235 210 220 230 220H245" stroke="white" stroke-width="16" stroke-linecap="round"/>
+<!-- Second 'r' -->
+<path d="M260 360V260C260 235 280 220 300 220H315" stroke="white" stroke-width="16" stroke-linecap="round"/>
+
+<!-- Dot details for minimalist look -->
+
+<circle cx="190" cy="260" r="8" fill="white"/>
+<circle cx="260" cy="260" r="8" fill="white"/>
+</svg>

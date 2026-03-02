@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomodorro/presentation/create/duration_slider.dart';
 
 class CreatePage extends StatefulWidget {
   const CreatePage({super.key});
@@ -9,9 +10,9 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage> {
   late TextEditingController _titleController;
-  double _concentration = 25;
-  double _relax = 5;
-  double _cycles = 3;
+  int _concentration = 25;
+  int _relax = 5;
+  int _cycles = 3;
 
   @override
   void initState() {
@@ -75,23 +76,16 @@ class _CreatePageState extends State<CreatePage> {
 
   Widget _buildSliderField(
     String label,
-    double value,
-    double min,
-    double max,
-    Function(double) onChanged,
+    int value,
+    int min,
+    int max,
+    Function(int) onChanged,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('$label: ${value.toInt()}'),
-        Slider(
-          value: value,
-          min: min,
-          max: max,
-          divisions: (max - min).toInt(),
-          onChanged: onChanged,
-        ),
-      ],
+    return DurationSlider(
+      value: value,
+      min: min,
+      max: max,
+      onChanged: onChanged,
     );
   }
 }
