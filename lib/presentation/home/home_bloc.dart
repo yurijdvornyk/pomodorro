@@ -8,10 +8,19 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
   HomeBloc({required PomRepository pomRepository})
     : _pomRepository = pomRepository {}
 
+  @override
   void start() {
+    super.start();
     _pomRepository.loadPoms().listen(
       (poms) => emitState(HomeState(pomodorros: poms)),
     );
+  }
+
+  @override
+  void onEvent(HomeEvent event) {
+    if (event is ItemTappedEvent) {
+      print("Tapped on item: ${event.item}");
+    }
   }
 }
 
@@ -26,3 +35,9 @@ class HomeState {
 }
 
 class HomeEvent {}
+
+class ItemTappedEvent implements HomeEvent {
+  final PomodorroItem item;
+
+  ItemTappedEvent({required this.item});
+}

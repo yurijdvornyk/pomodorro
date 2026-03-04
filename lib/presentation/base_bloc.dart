@@ -11,6 +11,12 @@ class PBloc<State, Event> {
 
   Stream<Event> get eventStream => _eventController.stream;
 
+  void start() {
+    eventStream.listen((event) => onEvent(event));
+  }
+
+  void onEvent(Event event) {}
+
   void emitState(State state) {
     _stateController.sink.add(state);
   }

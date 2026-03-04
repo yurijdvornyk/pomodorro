@@ -49,34 +49,8 @@ class _HomePageState extends State<HomePage> {
                         return HomeCard(
                           pomodorroItem: state.pomodorros[itemIndex],
                           onTap: (item) {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (ctx, animation, secondaryAnimation) =>
-                                        const CreatePage(),
-                                transitionsBuilder: (
-                                  ctx,
-                                  animation,
-                                  secondaryAnimation,
-                                  child,
-                                ) {
-                                  final tween = Tween<Offset>(
-                                    begin: const Offset(
-                                      0,
-                                      1,
-                                    ), // start just below the screen
-                                    end: Offset.zero,
-                                  );
-                                  final offsetAnimation = animation
-                                      .drive(CurveTween(curve: Curves.ease))
-                                      .drive(tween);
-
-                                  return SlideTransition(
-                                    position: offsetAnimation,
-                                    child: child,
-                                  );
-                                },
-                              ),
+                            widget._homeBloc.postEvent(
+                              ItemTappedEvent(item: item),
                             );
                           },
                         );
@@ -90,6 +64,25 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  void openCreatePage() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (ctx, animation, secondaryAnimation) => const CreatePage(),
+        transitionsBuilder: (ctx, animation, secondaryAnimation, child) {
+          final tween = Tween<Offset>(
+            begin: const Offset(0, 1), // start just below the screen
+            end: Offset.zero,
+          );
+          final offsetAnimation = animation
+              .drive(CurveTween(curve: Curves.ease))
+              .drive(tween);
+
+          return SlideTransition(position: offsetAnimation, child: child);
+        },
       ),
     );
   }
