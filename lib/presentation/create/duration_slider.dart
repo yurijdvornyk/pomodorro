@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// A custom duration selector that mimics the example screenshot.
-///
-/// The widget paints a row of tick marks and shows the currently selected
-/// value in the centre.  Dragging horizontally updates the value.
 class DurationSlider extends StatefulWidget {
   const DurationSlider({
     super.key,
@@ -37,11 +33,13 @@ class _DurationSliderState extends State<DurationSlider> {
 
   void _handleDragUpdate(DragUpdateDetails details) {
     final dx = details.globalPosition.dx - _dragStartX;
-    // convert dx to change in minutes; adjust sensitivity as needed
     final change = (dx / 4).round();
     var newValue = _startValue + change;
-    if (newValue < widget.min) newValue = widget.min;
-    if (newValue > widget.max) newValue = widget.max;
+    if (newValue < widget.min) {
+      newValue = widget.min;
+    } else  if (newValue > widget.max) {
+      newValue = widget.max;
+    }
     if (newValue != widget.value) {
       widget.onChanged(newValue);
     }
@@ -53,7 +51,7 @@ class _DurationSliderState extends State<DurationSlider> {
       onHorizontalDragStart: _handleDragStart,
       onHorizontalDragUpdate: _handleDragUpdate,
       child: SizedBox(
-        height: 80,
+        height: 60,
         child: CustomPaint(
           painter: _SliderPainter(
             value: widget.value,
@@ -93,11 +91,11 @@ class _SliderPainter extends CustomPainter {
     final paint =
         Paint()
           ..color = Colors.grey[400]!
-          ..strokeWidth = 2;
+          ..strokeWidth = 1;
 
-    const tickSpacing = 10.0;
-    const longTick = 16.0;
-    const shortTick = 8.0;
+    const tickSpacing = 5.0;
+    const longTick = 8.0;
+    const shortTick = 4.0;
 
     // draw ticks across width
     final center = size.width / 2;
@@ -123,7 +121,7 @@ class _SliderPainter extends CustomPainter {
     final indicatorPaint =
         Paint()
           ..color = Colors.red
-          ..strokeWidth = 4;
+          ..strokeWidth = 2;
     canvas.drawLine(
       Offset(center, 0),
       Offset(center, size.height),

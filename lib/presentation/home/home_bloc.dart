@@ -6,7 +6,7 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
   final PomRepository _pomRepository;
 
   HomeBloc({required PomRepository pomRepository})
-    : _pomRepository = pomRepository {}
+    : _pomRepository = pomRepository;
 
   @override
   void start() {

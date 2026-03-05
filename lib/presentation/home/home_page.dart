@@ -18,6 +18,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     widget._homeBloc.start();
+    // widget._homeBloc.stateStream.listen((state) {
+    //   if (state is OpenCreatePageState) {
+    //     openCreatePage();
+    //   }
+    // });
   }
 
   @override
@@ -49,9 +54,10 @@ class _HomePageState extends State<HomePage> {
                         return HomeCard(
                           pomodorroItem: state.pomodorros[itemIndex],
                           onTap: (item) {
-                            widget._homeBloc.postEvent(
-                              ItemTappedEvent(item: item),
-                            );
+                            openCreatePage();
+                            // widget._homeBloc.postEvent(
+                            //   ItemTappedEvent(item: item),
+                            // );
                           },
                         );
                       } else {
@@ -66,6 +72,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    widget._homeBloc.dispose();
+    super.dispose();
   }
 
   void openCreatePage() {
