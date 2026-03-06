@@ -96,7 +96,6 @@ class _CreatePageState extends State<CreatePage> {
           min: min,
           max: max,
           onChanged: onChanged,
-          width: 250,
         ),
       ],
     );
