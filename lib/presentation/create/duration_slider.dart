@@ -99,7 +99,6 @@ class _SliderPainter extends CustomPainter {
 
     // draw ticks across width
     final center = size.width / 2;
-    final totalTicks = ((max - min) * tickSpacing).toInt();
     // Instead of drawing all ticks, draw enough to fill area around center
     final visibleTicks = (size.width / tickSpacing).ceil();
     final startTickIndex = value - (visibleTicks ~/ 2);

@@ -15,13 +15,6 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
       (poms) => emitState(HomeState(pomodorros: poms)),
     );
   }
-
-  @override
-  void onEvent(HomeEvent event) {
-    if (event is ItemTappedEvent) {
-      print("Tapped on item: ${event.item}");
-    }
-  }
 }
 
 class HomeState {
