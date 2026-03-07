@@ -21,3 +21,17 @@ PomPlatform get getCurrentPlatform {
     throw UnsupportedError('Unsupported platform');
   }
 }
+
+final bool isWeb = getCurrentPlatform == PomPlatform.web;
+
+final bool isDesktop =
+    getCurrentPlatform == PomPlatform.windows ||
+    getCurrentPlatform == PomPlatform.linux ||
+    getCurrentPlatform == PomPlatform.macos;
+
+final bool isMobile =
+    getCurrentPlatform == PomPlatform.android ||
+    getCurrentPlatform == PomPlatform.ios;
+
+final isMobileOrAppleDesktop =
+    isMobile || getCurrentPlatform == PomPlatform.macos;
