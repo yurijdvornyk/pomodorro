@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomodorro/data/model/pomodorro_item.dart';
+import 'package:pomodorro/model/pomodorro_item.dart';
 
 class HomeCard extends StatefulWidget {
   const HomeCard({

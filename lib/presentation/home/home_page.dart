@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/create/create_page.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/presentation/home/home_card.dart';
@@ -40,30 +41,34 @@ class _HomePageState extends State<HomePage> {
               } else if (state.pomodorros.isEmpty) {
                 return Text("No pomodorros. Let's create one!");
               }
-              return SizedBox(
-                height: 200,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(state.pomodorros.length * 2 - 1, (index) {
-                      if (index.isEven) {
-                        final itemIndex = index ~/ 2;
-                        return HomeCard(
-                          pomodorroItem: state.pomodorros[itemIndex],
-                          onTap: (item) {
-                            openCreatePage();
-                          },
-                        );
-                      } else {
-                        return SizedBox(width: 20);
-                      }
-                    }),
-                  ),
-                ),
-              );
+              return _buildPomsList(state.pomodorros);
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPomsList(List<PomodorroItem> poms) {
+    return SizedBox(
+      height: 200,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(poms.length * 2 - 1, (index) {
+            if (index.isEven) {
+              final itemIndex = index ~/ 2;
+              return HomeCard(
+                pomodorroItem: poms[itemIndex],
+                onTap: (item) {
+                  openCreatePage();
+                },
+              );
+            } else {
+              return SizedBox(width: 20);
+            }
+          }),
         ),
       ),
     );

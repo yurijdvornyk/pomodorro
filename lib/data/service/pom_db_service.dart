@@ -1,5 +1,5 @@
 import 'package:pomodorro/data/db/pom_db.dart';
-import 'package:pomodorro/data/model/pomodorro_item.dart';
+import 'package:pomodorro/model/pomodorro_item.dart';
 
 class PomDbService {
   final PomDb _db = PomDb();

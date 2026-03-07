@@ -1,4 +1,4 @@
-import 'package:pomodorro/data/model/pom_mappable.dart';
+import 'package:pomodorro/model/pom_mappable.dart';
 
 class PomodorroItem implements PomMappable {
   final int id;

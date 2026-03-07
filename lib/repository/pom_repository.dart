@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:pomodorro/data/model/pomodorro_item.dart';
+import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/data/service/pom_db_service.dart';
 
 class PomRepository {
