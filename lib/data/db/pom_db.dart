@@ -3,7 +3,7 @@ import 'package:pomodorro/data/db/pom_db_desktop_web.dart';
 import 'package:pomodorro/data/db/pom_db_mobile_mac.dart';
 
 abstract class PomDb {
-  factory PomDb() => _createInstance();
+  factory PomDb() => _getInstance();
 
   Future<void> open();
 
@@ -37,12 +37,17 @@ abstract class PomDb {
   );
 }
 
-PomDb _createInstance() {
-  if (isMobileOrAppleDesktop) {
-    return PomDbMobile();
-  } else if (isWeb || isDesktop) {
-    return PomDbDesktopWeb();
-  } else {
-    throw UnsupportedError('Platform is not supported by PomDb');
+PomDb? _instance;
+
+PomDb _getInstance() {
+  if (_instance == null) {
+    if (isMobileOrAppleDesktop) {
+      _instance = PomDbMobile();
+    } else if (isWeb || isDesktop) {
+      _instance = PomDbDesktopWeb();
+    } else {
+      throw UnsupportedError('Platform is not supported by PomDb');
+    }
   }
+  return _instance!;
 }

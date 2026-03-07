@@ -11,9 +11,9 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
   @override
   void start() {
     super.start();
-    _pomRepository.loadPoms().listen(
-      (poms) => emitState(HomeState(pomodorros: poms)),
-    );
+    _pomRepository.fetchPomodorros().then((poms) {
+      emitState(HomeState(pomodorros: poms));
+    });
   }
 }
 

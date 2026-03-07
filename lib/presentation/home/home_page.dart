@@ -46,18 +46,13 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(state.pomodorros.length * 2 - 1, (
-                      index,
-                    ) {
+                    children: List.generate(state.pomodorros.length * 2 - 1, (index) {
                       if (index.isEven) {
                         final itemIndex = index ~/ 2;
                         return HomeCard(
                           pomodorroItem: state.pomodorros[itemIndex],
                           onTap: (item) {
                             openCreatePage();
-                            // widget._homeBloc.postEvent(
-                            //   ItemTappedEvent(item: item),
-                            // );
                           },
                         );
                       } else {
