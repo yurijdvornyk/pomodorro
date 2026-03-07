@@ -1,7 +1,16 @@
 import 'package:pomodorro/data/db/pom_db.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class PomDbDesktopWeb implements PomDb {
+  Database get database {
+    if (_db != null) {
+      return _db!;
+    } else {
+      throw StateError('Database not opened');
+    }
+  }
+
   Database? _db;
 
   PomDbDesktopWeb() {
@@ -24,12 +33,11 @@ class PomDbDesktopWeb implements PomDb {
     _db = null;
   }
 
-  Database get database {
-    if (_db != null) {
-      return _db!;
-    } else {
-      throw StateError('Database not opened');
-    }
+  @override
+  Future<void> initialize() async {
+    final script = await rootBundle.loadString('assets/sql/schema.sql');
+    await open();
+    await database.execute(script);
   }
 
   @override

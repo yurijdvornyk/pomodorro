@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS POMODORROS (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    concentrationMinutes INTEGER NOT NULL,
+    relaxationMinutes INTEGER NOT NULL,
+    cyclesCount INTEGER NOT NULL
+);

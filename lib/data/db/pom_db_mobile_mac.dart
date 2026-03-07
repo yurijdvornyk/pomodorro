@@ -1,9 +1,19 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:pomodorro/data/db/pom_db.dart';
 import 'package:sqlite3/sqlite3.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class PomDbMobile implements PomDb {
+  Database get database {
+    if (_db != null) {
+      return _db!;
+    } else {
+      throw StateError('Database not opened');
+    }
+  }
+
   Database? _db;
 
   PomDbMobile();
@@ -19,11 +29,14 @@ class PomDbMobile implements PomDb {
     _db = null;
   }
 
-  Database get database {
-    if (_db != null) {
-      return _db!;
-    } else {
-      throw StateError('Database not opened');
+  @override
+  Future<void> initialize() async {
+    final script = await rootBundle.loadString('assets/sql/schema.sql');
+    await open();
+     try {
+      database.execute(script);
+    } catch (e) {
+      _catchDbError(e);
     }
   }
 
@@ -69,7 +82,8 @@ class PomDbMobile implements PomDb {
     List<Object?>? whereArgs,
   }) async {
     try {
-      final query = 'SELECT * FROM $tableName${where != null ? ' WHERE $where' : ''}';
+      final query =
+          'SELECT * FROM $tableName${where != null ? ' WHERE $where' : ''}';
       final resultSet = _db?.select(query, whereArgs ?? []);
       final columnsCount = resultSet?.columnNames.length ?? 0;
       final List<Map<String, Object?>> result = [];
@@ -92,7 +106,10 @@ class PomDbMobile implements PomDb {
   }
 
   @override
-  Future<void> insertRecords(String tableName, Map<String, Object?> values) async {
+  Future<void> insertRecords(
+    String tableName,
+    Map<String, Object?> values,
+  ) async {
     try {
       final columns = values.keys.join(', ');
       final placeholders = List.filled(values.length, '?').join(', ');

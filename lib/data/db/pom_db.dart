@@ -11,15 +11,30 @@ abstract class PomDb {
 
   Future<void> delete();
 
+  Future<void> initialize();
+
   Future<Object?> findRecordById(String tableName, int id);
 
-  Future<List<Map<String, Object?>>> getRecords(String tableName, {String? where, List<Object?>? whereArgs});
+  Future<List<Map<String, Object?>>> getRecords(
+    String tableName, {
+    String? where,
+    List<Object?>? whereArgs,
+  });
 
   Future<void> insertRecords(String tableName, Map<String, Object?> values);
 
-  Future<void> updateRecords(String tableName, Map<String, Object?> values, String where, List<Object?> whereArgs);
+  Future<void> updateRecords(
+    String tableName,
+    Map<String, Object?> values,
+    String where,
+    List<Object?> whereArgs,
+  );
 
-  Future<void> deleteRecords(String tableName, String where, List<Object?> whereArgs);
+  Future<void> deleteRecords(
+    String tableName,
+    String where,
+    List<Object?> whereArgs,
+  );
 }
 
 PomDb _createInstance() {
