@@ -1,51 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
-import 'package:pomodorro/presentation/create/create_page.dart';
+import 'package:pomodorro/presentation/edit/edit_bloc.dart';
+import 'package:pomodorro/presentation/edit/edit_page.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/presentation/home/home_card.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required HomeBloc homeBloc})
-    : _homeBloc = homeBloc;
 
-  final HomeBloc _homeBloc;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
+  late final HomeBloc bloc;
+
   @override
   void initState() {
     super.initState();
-    widget._homeBloc.start();
-    // widget._homeBloc.stateStream.listen((state) {
-    //   if (state is OpenCreatePageState) {
-    //     openCreatePage();
-    //   }
-    // });
+    bloc = PomDependencyInjector.instance.homeBloc;
+    bloc.start();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Home")),
-      body: SafeArea(
-        child: Center(
-          child: StreamBuilder<HomeState>(
-            stream: widget._homeBloc.stateStream,
-            builder: (context, snapshot) {
-              final state = snapshot.data;
-              if (state == null) {
-                return CircularProgressIndicator();
-              } else if (state.pomodorros.isEmpty) {
-                return Text("No pomodorros. Let's create one!");
-              }
-              return _buildPomsList(state.pomodorros);
-            },
+    return StreamBuilder<HomeState>(
+      stream: bloc.stateStream,
+      builder: (context, snapshot) {
+        final state = snapshot.data;
+        return Scaffold(
+          appBar: AppBar(title: Text("Home")),
+          bottomSheet: _buildHomeBottomSheets(state),
+          body: SafeArea(
+            child: Center(
+              child:
+                  state == null
+                      ? CircularProgressIndicator()
+                      : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (state.pomodorros.isEmpty) ...[
+                              Text("No pomodorros. Let's create one!"),
+                            ] else ...[
+                              _buildPomsList(state.pomodorros),
+                            ],
+                            SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: onCreateTapped,
+                              child: Text("Create Pomodorro"),
+                            ),
+                          ],
+                        ),
+                      ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -62,7 +76,7 @@ class _HomePageState extends State<HomePage> {
               return HomeCard(
                 pomodorroItem: poms[itemIndex],
                 onTap: (item) {
-                  openCreatePage();
+                  onCreateTapped();
                 },
               );
             } else {
@@ -74,28 +88,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget? _buildHomeBottomSheets(HomeState? state) {
+    if (state == null) {
+      return null;
+    } else {
+      return state.editingItem != null ? EditPage(bloc: EditBloc(editingItem: state.editingItem)) : null;
+    }
+  }
+
   @override
   void dispose() {
-    widget._homeBloc.dispose();
+    bloc.dispose();
     super.dispose();
   }
 
-  void openCreatePage() {
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (ctx, animation, secondaryAnimation) => const CreatePage(),
-        transitionsBuilder: (ctx, animation, secondaryAnimation, child) {
-          final tween = Tween<Offset>(
-            begin: const Offset(0, 1), // start just below the screen
-            end: Offset.zero,
-          );
-          final offsetAnimation = animation
-              .drive(CurveTween(curve: Curves.ease))
-              .drive(tween);
-
-          return SlideTransition(position: offsetAnimation, child: child);
-        },
-      ),
-    );
+  void onCreateTapped() {
+    bloc.sendEvent(CreateTappedEvent());
   }
 }

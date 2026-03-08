@@ -16,4 +16,27 @@ class PomDbService {
               records.map((record) => PomodorroItem.fromMap(record)).toList(),
         );
   }
+
+  Future<PomodorroItem> savePomodorro({
+    String? title,
+    required int concentrationMinutes,
+    required int relaxationMinutes,
+    required int cyclesCount,
+  }) {
+    return _db
+        .insertRecord("POMODORROS", {
+          'concentrationMinutes': concentrationMinutes,
+          'relaxationMinutes': relaxationMinutes,
+          'cyclesCount': cyclesCount,
+        })
+        .then((id) {
+          return PomodorroItem(
+            id: id,
+            title: title ?? "",
+            concentrationMinutes: concentrationMinutes,
+            relaxationMinutes: relaxationMinutes,
+            cyclesCount: cyclesCount,
+          );
+        });
+  }
 }

@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 
-class PBloc<State, Event> {
+abstract class PBloc<State, Event> {
   final StreamController<State> _stateController = StreamController<State>();
 
   final StreamController<Event> _eventController = StreamController<Event>();
@@ -11,17 +10,26 @@ class PBloc<State, Event> {
 
   Stream<Event> get eventStream => _eventController.stream;
 
+  State? _currentState;
+
+  State get initialState;
+
+  State get currentState => _currentState ?? initialState;
+
+  @mustCallSuper
   void start() {
+    _currentState = initialState;
     eventStream.listen((event) => onEvent(event));
   }
 
-  void onEvent(Event event) {}
+  void onEvent(Event event);
 
   void emitState(State state) {
+    _currentState = state;
     _stateController.sink.add(state);
   }
 
-  void postEvent(Event event) {
+  void sendEvent(Event event) {
     _eventController.sink.add(event);
   }
 

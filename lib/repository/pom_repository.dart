@@ -15,4 +15,18 @@ class PomRepository {
   Future<List<PomodorroItem>> fetchPomodorros() {
     return _dbService.getPomodorros();
   }
+
+  void savePomodorro({
+    String? title,
+    required int concentrationMinutes,
+    required int relaxationMinutes,
+    required int cyclesCount,
+  }) {
+    _dbService.savePomodorro(
+      title: title,
+      concentrationMinutes: concentrationMinutes,
+      relaxationMinutes: relaxationMinutes,
+      cyclesCount: cyclesCount,
+    );
+  }
 }

@@ -106,7 +106,7 @@ class PomDbMobile implements PomDb {
   }
 
   @override
-  Future<void> insertRecords(
+  Future<int> insertRecord(
     String tableName,
     Map<String, Object?> values,
   ) async {
@@ -115,8 +115,10 @@ class PomDbMobile implements PomDb {
       final placeholders = List.filled(values.length, '?').join(', ');
       final query = 'INSERT INTO $tableName ($columns) VALUES ($placeholders)';
       _db?.execute(query, values.values.toList());
+      return _db?.lastInsertRowId ?? 0;
     } catch (e) {
       _catchDbError(e);
+      return -1; // Return -1 to indicate failure
     }
   }
 

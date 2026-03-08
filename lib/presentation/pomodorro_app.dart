@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:pomodorro/data/service/pom_db_service.dart';
-import 'package:pomodorro/repository/pom_repository.dart';
+import 'package:pomodorro/common/dependencies/injector.dart';
 
-import 'home/home_bloc.dart';
 import 'home/home_page.dart';
 
 class PomodorroApp extends StatelessWidget {
   PomodorroApp({super.key});
 
-  final PomRepository _pomRepository = PomRepository(PomDbService());
+  final PomDependencyInjector _injector = PomDependencyInjector();
 
   @override
   Widget build(BuildContext context) {
+    final pomRepository = _injector.pomRepository;
     return FutureBuilder(
-      future: _pomRepository.initializeDatabase(),
+      future: pomRepository.initializeDatabase(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
@@ -21,12 +20,10 @@ class PomodorroApp extends StatelessWidget {
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),
-            home: HomePage(homeBloc: HomeBloc(pomRepository: _pomRepository)),
+            home: HomePage(),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

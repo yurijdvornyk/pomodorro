@@ -21,7 +21,7 @@ abstract class PomDb {
     List<Object?>? whereArgs,
   });
 
-  Future<void> insertRecords(String tableName, Map<String, Object?> values);
+  Future<int> insertRecord(String tableName, Map<String, Object?> values);
 
   Future<void> updateRecords(
     String tableName,

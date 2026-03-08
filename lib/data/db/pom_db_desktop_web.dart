@@ -46,11 +46,11 @@ class PomDbDesktopWeb implements PomDb {
   }
 
   @override
-  Future<void> insertRecords(
+  Future<int> insertRecord(
     String tableName,
     Map<String, Object?> values,
   ) async {
-    await database.insert(tableName, values);
+    return await database.insert(tableName, values);
   }
 
   @override
