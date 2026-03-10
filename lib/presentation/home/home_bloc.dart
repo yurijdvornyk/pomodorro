@@ -20,28 +20,34 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
   void onEvent(HomeEvent event) {
     if (event is ItemTappedEvent) {
       emitState(
-        currentState.copyWith(editingItem: event.item, isCreating: false),
+        currentState.copyWith(showDetailsPage: true, editingItem: event.item),
       );
     } else if (event is CreateTappedEvent) {
-      emitState(currentState.copyWith(isCreating: true, editingItem: null));
+      emitState(currentState.copyWith(showDetailsPage: true, editingItem: null));
     }
   }
 }
 
 class HomeState {
+  final bool showDetailsPage;
   final PomodorroItem? editingItem;
   final List<PomodorroItem> pomodorros;
 
-  const HomeState({this.pomodorros = const [], this.editingItem});
+  const HomeState({
+    this.pomodorros = const [],
+    this.editingItem,
+    this.showDetailsPage = false,
+  });
 
   HomeState copyWith({
-    bool? isCreating,
+    bool? showDetailsPage,
     PomodorroItem? editingItem,
     List<PomodorroItem>? pomodorros,
   }) {
     return HomeState(
       editingItem: editingItem ?? this.editingItem,
       pomodorros: pomodorros ?? this.pomodorros,
+      showDetailsPage: showDetailsPage ?? this.showDetailsPage,
     );
   }
 }

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
-import 'package:pomodorro/presentation/edit/edit_bloc.dart';
 import 'package:pomodorro/presentation/edit/edit_page.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/presentation/home/home_card.dart';
 
 class HomePage extends StatefulWidget {
-
   const HomePage({super.key});
 
   @override
@@ -15,13 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  late final HomeBloc bloc;
+  final HomeBloc bloc = PomDependencyInjector.instance.homeBloc;
 
   @override
   void initState() {
     super.initState();
-    bloc = PomDependencyInjector.instance.homeBloc;
     bloc.start();
   }
 
@@ -91,8 +87,10 @@ class _HomePageState extends State<HomePage> {
   Widget? _buildHomeBottomSheets(HomeState? state) {
     if (state == null) {
       return null;
+    } else if (state.showDetailsPage) {
+      return EditPage(pomodorroItem: state.editingItem);
     } else {
-      return state.editingItem != null ? EditPage(bloc: EditBloc(editingItem: state.editingItem)) : null;
+      return null;
     }
   }
 
