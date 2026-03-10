@@ -1,4 +1,5 @@
 import 'package:pomodorro/data/service/pom_db_service.dart';
+import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/edit/edit_bloc.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/repository/pom_repository.dart';
@@ -20,7 +21,7 @@ class PomDependencyInjector {
   // Add your dependencies here
   HomeBloc get homeBloc => HomeBloc();
   
-  EditBloc get editBloc => EditBloc();
+  EditBloc editBloc(PomodorroItem? pomItem) => EditBloc(editingItem: pomItem);
 
   late final PomRepository pomRepository;
 

@@ -14,19 +14,21 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  final bloc = PomDependencyInjector.instance.editBloc;
+  late final EditBloc bloc;
 
-  late TextEditingController _titleController;
+  late TextEditingController titleController;
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController();
+    bloc = PomDependencyInjector.instance.editBloc(widget.pomodorroItem);
+    titleController = TextEditingController();
+    bloc.start();
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
+    titleController.dispose();
     super.dispose();
   }
 
@@ -49,11 +51,12 @@ class _EditPageState extends State<EditPage> {
         child: Column(
           children: [
             Text(
-              bloc.toString(),
+              widget.pomodorroItem != null ? 'Pom details' : 'Create new pom',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
+            const SizedBox(height: 16),
             TextField(
-              controller: _titleController,
+              controller: titleController,
               onChanged: (value) => bloc.sendEvent(UpdateTitleEvent(value)),
               decoration: InputDecoration(
                 hintText: 'Your pom title here',
