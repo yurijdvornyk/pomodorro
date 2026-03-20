@@ -45,70 +45,82 @@ class _EditPageState extends State<EditPage> {
   }
 
   Widget _buildEditPomWidget(EditState state) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              widget.pomodorroItem != null ? 'Pom details' : 'Create new pom',
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: titleController,
-              onChanged: (value) => bloc.sendEvent(UpdateTitleEvent(value)),
-              decoration: InputDecoration(
-                hintText: 'Your pom title here',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            _buildSliderField(
-              'Concentration',
-              state.concentration,
-              5,
-              90,
-              (value) => bloc.sendEvent(UpdateConcentrationEvent(value)),
-            ),
-            const SizedBox(height: 16),
-            _buildSliderField(
-              'Relax',
-              state.relax,
-              1,
-              30,
-              (value) => bloc.sendEvent(UpdateRelaxEvent(value)),
-            ),
-            const SizedBox(height: 16),
-            _buildSliderField(
-              'Cycles',
-              state.cycles,
-              1,
-              10,
-              (value) => bloc.sendEvent(UpdateCyclesEvent(value)),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      children: [
+        AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios_new),
+          ),
+          title: Text(
+            widget.pomodorroItem != null ? 'Pom details' : 'Create new pom',
+          ),
+        ),
+        SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                ElevatedButton(
-                  onPressed: () => bloc.sendEvent(SaveEvent()),
-                  child: const Text('Save'),
+                TextField(
+                  controller: titleController,
+                  onChanged: (value) => bloc.sendEvent(UpdateTitleEvent(value)),
+                  decoration: InputDecoration(
+                    hintText: 'Your pom title here',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                  child: const Text('Remove'),
+                const SizedBox(height: 24),
+                _buildSliderField(
+                  'Concentration',
+                  state.concentration,
+                  5,
+                  90,
+                  (value) => bloc.sendEvent(UpdateConcentrationEvent(value)),
                 ),
+                const SizedBox(height: 16),
+                _buildSliderField(
+                  'Relax',
+                  state.relax,
+                  1,
+                  30,
+                  (value) => bloc.sendEvent(UpdateRelaxEvent(value)),
+                ),
+                const SizedBox(height: 16),
+                _buildSliderField(
+                  'Cycles',
+                  state.cycles,
+                  1,
+                  10,
+                  (value) => bloc.sendEvent(UpdateCyclesEvent(value)),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => bloc.sendEvent(SaveEvent()),
+                      child: const Text('Save'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child: const Text('Remove'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
               ],
             ),
-            SizedBox(height: 16),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
         final state = snapshot.data;
         return Scaffold(
           appBar: AppBar(title: Text("Home")),
-          bottomSheet: _buildHomeBottomSheets(state),
           body: SafeArea(
             child: Center(
               child:
@@ -46,7 +45,15 @@ class _HomePageState extends State<HomePage> {
                             ],
                             SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: onCreateTapped,
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return _buildHomeBottomSheet(state);
+                                  },
+                                );
+                              },
                               child: Text("Create Pomodorro"),
                             ),
                           ],
@@ -84,14 +91,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget? _buildHomeBottomSheets(HomeState? state) {
-    if (state == null) {
-      return null;
-    } else if (state.showDetailsPage) {
-      return EditPage(pomodorroItem: state.editingItem);
-    } else {
-      return null;
-    }
+  Widget _buildHomeBottomSheet(HomeState? state) {
+    return EditPage(pomodorroItem: state?.editingItem);
   }
 
   @override
