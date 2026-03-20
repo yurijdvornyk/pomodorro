@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
-import 'package:pomodorro/presentation/edit/edit_page.dart';
+import 'package:pomodorro/presentation/edit/details_page.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/presentation/home/home_card.dart';
 
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHomeBottomSheet(HomeState? state) {
-    return EditPage(pomodorroItem: state?.editingItem);
+    return DetailsPage(pomodorroItem: state?.editingItem);
   }
 
   @override

@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/edit/duration_slider.dart';
-import 'package:pomodorro/presentation/edit/edit_bloc.dart';
+import 'package:pomodorro/presentation/edit/details_bloc.dart';
 
-class EditPage extends StatefulWidget {
-  const EditPage({super.key, this.pomodorroItem});
+class DetailsPage extends StatefulWidget {
+  const DetailsPage({super.key, this.pomodorroItem});
 
   final PomodorroItem? pomodorroItem;
 
   @override
-  State<EditPage> createState() => _EditPageState();
+  State<DetailsPage> createState() => _DetailsPageState();
 }
 
-class _EditPageState extends State<EditPage> {
-  late final EditBloc bloc;
+class _DetailsPageState extends State<DetailsPage> {
+  late final DetailsBloc bloc;
 
   late TextEditingController titleController;
 
   @override
   void initState() {
     super.initState();
-    bloc = PomDependencyInjector.instance.editBloc(widget.pomodorroItem);
+    bloc = PomDependencyInjector.instance.detailsBloc(widget.pomodorroItem);
     titleController = TextEditingController();
     bloc.start();
   }

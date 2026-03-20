@@ -3,13 +3,13 @@ import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/base_bloc.dart';
 import 'package:pomodorro/repository/pom_repository.dart';
 
-class EditBloc extends PBloc<EditState, EditEvent> {
+class DetailsBloc extends PBloc<EditState, EditEvent> {
 
   final PomRepository _repository = PomDependencyInjector.instance.pomRepository;
 
   final PomodorroItem? _editingItem;
 
-  EditBloc({PomodorroItem? editingItem}) : _editingItem = editingItem;
+  DetailsBloc({PomodorroItem? editingItem}) : _editingItem = editingItem;
 
   @override
   EditState get initialState =>
