@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
-import 'package:pomodorro/presentation/edit/duration_slider.dart';
 import 'package:pomodorro/presentation/edit/details_bloc.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -58,85 +57,59 @@ class _DetailsPageState extends State<DetailsPage> {
             widget.pomodorroItem != null ? 'Pom details' : 'Create new pom',
           ),
         ),
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: titleController,
-                  onChanged: (value) => bloc.sendEvent(UpdateTitleEvent(value)),
-                  decoration: InputDecoration(
-                    hintText: 'Your pom title here',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                _buildSliderField(
-                  'Concentration',
-                  state.concentration,
-                  5,
-                  90,
-                  (value) => bloc.sendEvent(UpdateConcentrationEvent(value)),
-                ),
-                const SizedBox(height: 16),
-                _buildSliderField(
-                  'Relax',
-                  state.relax,
-                  1,
-                  30,
-                  (value) => bloc.sendEvent(UpdateRelaxEvent(value)),
-                ),
-                const SizedBox(height: 16),
-                _buildSliderField(
-                  'Cycles',
-                  state.cycles,
-                  1,
-                  10,
-                  (value) => bloc.sendEvent(UpdateCyclesEvent(value)),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => bloc.sendEvent(SaveEvent()),
-                      child: const Text('Save'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                      ),
-                      child: const Text('Remove'),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-              ],
+        Padding(
+          padding: EdgeInsets.all(16.0),
+          child: TextField(
+            controller: titleController,
+            onChanged: (value) => bloc.sendEvent(UpdateTitleEvent(value)),
+            decoration: InputDecoration(
+              hintText: 'Your pom title here',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
+            textAlign: TextAlign.center,
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildSliderField(
-    String label,
-    int value,
-    int min,
-    int max,
-    Function(int) onChanged,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
-        DurationSlider(value: value, min: min, max: max, onChanged: onChanged),
+        Slider(
+          label: "Concentration",
+          value: state.concentration.toDouble(), 
+          min: 10.0,
+          max: 90.0,
+          onChanged: (x) => bloc.sendEvent(UpdateConcentrationEvent(x.toInt())),
+        ),
+        Slider(
+          label: "Relax",
+          value: state.relax.toDouble(), 
+          min: 1.0,
+          max: 30.0,
+          onChanged: (x) => bloc.sendEvent(UpdateRelaxEvent(x.toInt())),
+        ),
+        Slider(
+          label: "Cycles",
+          value: state.cycles.toDouble(), 
+          divisions: 10,
+          min: 1.0,
+          max: 10.0,
+          onChanged: (x) => bloc.sendEvent(UpdateCyclesEvent(x.toInt())),
+        ),
+        Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => bloc.sendEvent(SaveEvent()),
+                child: const Text('Save'),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                child: const Text('Remove'),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

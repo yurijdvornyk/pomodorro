@@ -15,6 +15,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final HomeBloc bloc = PomDependencyInjector.instance.homeBloc;
 
+  late CarouselController pomsController;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +51,14 @@ class _HomePageState extends State<HomePage> {
                                 showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
+                                  isDismissible: false,
+                                  useSafeArea: true,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  // backgroundColor: Colors.white,
                                   builder: (BuildContext context) {
                                     return _buildHomeBottomSheet(state);
                                   },
@@ -67,28 +77,47 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPomsList(List<PomodorroItem> poms) {
-    return SizedBox(
-      height: 200,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(poms.length * 2 - 1, (index) {
-            if (index.isEven) {
-              final itemIndex = index ~/ 2;
-              return HomeCard(
-                pomodorroItem: poms[itemIndex],
-                onTap: (item) {
-                  onCreateTapped();
-                },
-              );
-            } else {
-              return SizedBox(width: 20);
-            }
-          }),
-        ),
-      ),
+    // poms.map(pom => HomeCard(
+    //             pomodorroItem: poms[itemIndex],
+    //             onTap: (item) => onCreateTapped(),
+    //           ),
+    //           ).toList();
+    pomsController = CarouselController(initialItem: poms.length ~/ 2);
+    return CarouselView(
+      itemExtent: double.infinity,
+      scrollDirection: Axis.horizontal,
+      children:
+          poms
+              .map(
+                (pom) => HomeCard(
+                  pomodorroItem: pom,
+                  onTap: (item) => onCreateTapped(),
+                ),
+              )
+              .toList(),
     );
+    // return SizedBox(
+    //   height: 200,
+    //   child: SingleChildScrollView(
+    //     scrollDirection: Axis.horizontal,
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: List.generate(poms.length * 2 - 1, (index) {
+    //         if (index.isEven) {
+    //           final itemIndex = index ~/ 2;
+    //           return HomeCard(
+    //             pomodorroItem: poms[itemIndex],
+    //             onTap: (item) {
+    //               onCreateTapped();
+    //             },
+    //           );
+    //         } else {
+    //           return SizedBox(width: 20);
+    //         }
+    //       }),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget _buildHomeBottomSheet(HomeState? state) {
