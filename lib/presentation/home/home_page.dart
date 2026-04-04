@@ -53,12 +53,6 @@ class _HomePageState extends State<HomePage> {
                                   isScrollControlled: true,
                                   isDismissible: false,
                                   useSafeArea: true,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20.0),
-                                    ),
-                                  ),
-                                  // backgroundColor: Colors.white,
                                   builder: (BuildContext context) {
                                     return _buildHomeBottomSheet(state);
                                   },

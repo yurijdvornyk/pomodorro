@@ -47,6 +47,11 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
   }
 }
 
+enum DetailsMode {
+  create,
+  edit,
+}
+
 abstract class EditEvent {}
 
 class UpdateTitleEvent implements EditEvent {
@@ -76,12 +81,14 @@ class UpdateCyclesEvent implements EditEvent {
 class SaveEvent implements EditEvent {}
 
 class EditState {
+  final DetailsMode mode;
   final String? title;
   final int concentration;
   final int relax;
   final int cycles;
 
   EditState({
+    this.mode = DetailsMode.create,
     this.title,
     this.concentration = 25,
     this.relax = 5,
