@@ -4,8 +4,8 @@ import 'package:pomodorro/presentation/base_bloc.dart';
 import 'package:pomodorro/repository/pom_repository.dart';
 
 class DetailsBloc extends PBloc<EditState, EditEvent> {
-
-  final PomRepository _repository = PomDependencyInjector.instance.pomRepository;
+  final PomRepository _repository =
+      PomDependencyInjector.instance.pomRepository;
 
   final PomodorroItem? _editingItem;
 
@@ -34,12 +34,22 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
       emitState(currentState.copyWith(cycles: event.cycles));
     } else if (event is SaveEvent) {
       if (currentState.title != null) {
-        _repository.savePomodorro(
-          title: currentState.title,
-          concentrationMinutes: currentState.concentration,
-          relaxationMinutes: currentState.relax,
-          cyclesCount: currentState.cycles,
-        );
+        _repository
+            .savePomodorro(
+              title: currentState.title,
+              concentrationMinutes: currentState.concentration,
+              relaxationMinutes: currentState.relax,
+              cyclesCount: currentState.cycles,
+            )
+            .then(
+              (savedItem) => emitState(currentState.copyWith(
+                title: savedItem.title,
+                concentration: savedItem.concentrationMinutes,
+                relax: savedItem.relaxationMinutes,
+                cycles: savedItem.cyclesCount,
+                isSaved: true,
+              )),
+            );
       } else {
         throw StateError("Title cannot be empty");
       }
@@ -47,10 +57,7 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
   }
 }
 
-enum DetailsMode {
-  create,
-  edit,
-}
+enum DetailsMode { create, edit }
 
 abstract class EditEvent {}
 
@@ -86,6 +93,7 @@ class EditState {
   final int concentration;
   final int relax;
   final int cycles;
+  final bool isSaved;
 
   EditState({
     this.mode = DetailsMode.create,
@@ -93,6 +101,7 @@ class EditState {
     this.concentration = 25,
     this.relax = 5,
     this.cycles = 2,
+    this.isSaved = false,
   });
 
   EditState copyWith({
@@ -100,12 +109,14 @@ class EditState {
     int? concentration,
     int? relax,
     int? cycles,
+    bool? isSaved,
   }) {
     return EditState(
       title: title ?? this.title,
       concentration: concentration ?? this.concentration,
       relax: relax ?? this.relax,
       cycles: cycles ?? this.cycles,
+      isSaved: isSaved ?? this.isSaved,
     );
   }
 }

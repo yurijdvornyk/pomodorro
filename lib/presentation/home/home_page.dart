@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final HomeBloc bloc = PomDependencyInjector.instance.homeBloc;
 
-  late CarouselController pomsController;
+  final CarouselController pomsController = CarouselController();
 
   @override
   void initState() {
@@ -56,6 +56,15 @@ class _HomePageState extends State<HomePage> {
                                   builder: (BuildContext context) {
                                     return _buildHomeBottomSheet(state);
                                   },
+                                ).then(
+                                  (isSuccess) => {
+                                    if (isSuccess == true)
+                                      {
+                                        showSnackBar(
+                                          "Pomodorro saved successfully!",
+                                        ),
+                                      },
+                                  },
                                 );
                               },
                               child: Text("Create Pomodorro"),
@@ -76,7 +85,6 @@ class _HomePageState extends State<HomePage> {
     //             onTap: (item) => onCreateTapped(),
     //           ),
     //           ).toList();
-    pomsController = CarouselController(initialItem: poms.length ~/ 2);
     return CarouselView(
       itemExtent: double.infinity,
       scrollDirection: Axis.horizontal,
@@ -126,5 +134,15 @@ class _HomePageState extends State<HomePage> {
 
   void onCreateTapped() {
     bloc.sendEvent(CreateTappedEvent());
+  }
+
+  void showSnackBar(
+    String message, {
+    Duration duration = const Duration(seconds: 3),
+  }) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message), duration: duration));
   }
 }

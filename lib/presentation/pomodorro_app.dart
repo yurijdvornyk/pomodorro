@@ -20,7 +20,10 @@ class PomodorroApp extends StatelessWidget {
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),
-            home: HomePage(),
+            initialRoute: '/',
+            routes: {
+              '/': (context) => HomePage(),
+            },
           );
         } else {
           return Center(child: CircularProgressIndicator());

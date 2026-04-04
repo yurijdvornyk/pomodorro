@@ -151,14 +151,25 @@ class _DetailsPageState extends State<DetailsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => bloc.sendEvent(SaveEvent()),
-                  child: Text(state.mode == DetailsMode.create ? 'Create' : 'Save'),
+                  onPressed: () {
+                    if (state.title?.isNotEmpty == true) {
+                      bloc.sendEvent(SaveEvent());
+                      closeDetailsPage(context, true);
+                    } else {
+                      null;
+                    }
+                  },
+                  child: Text(
+                    state.mode == DetailsMode.create ? 'Create' : 'Save',
+                  ),
                 ),
                 SizedBox(width: 16.0),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => showCancelDialog(context, state.mode),
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                  child: Text(state.mode == DetailsMode.create ? 'Cancel' : 'Remove'),
+                  child: Text(
+                    state.mode == DetailsMode.create ? 'Cancel' : 'Remove',
+                  ),
                 ),
               ],
             ),
@@ -166,5 +177,31 @@ class _DetailsPageState extends State<DetailsPage> {
         ],
       ),
     );
+  }
+
+  Future<void> showCancelDialog(BuildContext context, DetailsMode mode) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Discard changes?"),
+          content: Text("Are you sure you want to discard the changes?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () => closeDetailsPage(context, false),
+              child: Text("Discard"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void closeDetailsPage(BuildContext context, bool isSuccess) {
+    Navigator.of(context).popUntilWithResult(ModalRoute.withName('/'), isSuccess);
   }
 }
