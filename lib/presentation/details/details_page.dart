@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomodorro/common/constants.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
-import 'package:pomodorro/presentation/edit/details_bloc.dart';
+import 'package:pomodorro/presentation/details/details_bloc.dart';
 import 'package:pomodorro/presentation/helpers/ui_utils.dart';
 
 class DetailsPage extends StatefulWidget {

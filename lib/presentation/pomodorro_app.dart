@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
-import 'package:pomodorro/presentation/edit/details_page.dart';
+import 'package:pomodorro/presentation/details/details_page.dart';
 
 import 'home/home_page.dart';
 

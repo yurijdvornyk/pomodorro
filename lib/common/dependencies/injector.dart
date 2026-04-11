@@ -1,6 +1,6 @@
 import 'package:pomodorro/data/service/pom_db_service.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
-import 'package:pomodorro/presentation/edit/details_bloc.dart';
+import 'package:pomodorro/presentation/details/details_bloc.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/repository/pom_repository.dart';
 
