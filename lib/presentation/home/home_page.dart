@@ -43,28 +43,14 @@ class _HomePageState extends State<HomePage> {
                             if (state.pomodorros.isEmpty) ...[
                               Text("No pomodorros. Let's create one!"),
                             ] else ...[
-                              _buildPomsList(state.pomodorros),
+                              _buildPomsList(state),
                             ],
                             SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  isDismissible: false,
-                                  useSafeArea: true,
-                                  builder: (BuildContext context) {
-                                    return _buildHomeBottomSheet(state);
-                                  },
-                                ).then(
-                                  (isSuccess) => {
-                                    if (isSuccess == true)
-                                      {
-                                        showSnackBar(
-                                          "Pomodorro saved successfully!",
-                                        ),
-                                      },
-                                  },
+                                openPomBottomSheet(
+                                  context,
+                                  null,
                                 );
                               },
                               child: Text("Create Pomodorro"),
@@ -79,51 +65,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildPomsList(List<PomodorroItem> poms) {
-    // poms.map(pom => HomeCard(
-    //             pomodorroItem: poms[itemIndex],
-    //             onTap: (item) => onCreateTapped(),
-    //           ),
-    //           ).toList();
-    return CarouselView(
-      itemExtent: double.infinity,
-      scrollDirection: Axis.horizontal,
-      children:
-          poms
-              .map(
-                (pom) => HomeCard(
-                  pomodorroItem: pom,
-                  onTap: (item) => onCreateTapped(),
-                ),
-              )
-              .toList(),
+  Widget _buildPomsList(HomeState state) {
+    return SizedBox(
+      height: 200.0,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: state.pomodorros.length,
+        separatorBuilder: (context, index) => SizedBox(width: 16),
+        shrinkWrap: true,
+        itemBuilder:
+            (context, index) => HomeCard(
+              pomodorroItem: state.pomodorros[index],
+              onTap: (item) => openPomBottomSheet(context, item),
+            ),
+      ),
     );
-    // return SizedBox(
-    //   height: 200,
-    //   child: SingleChildScrollView(
-    //     scrollDirection: Axis.horizontal,
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: List.generate(poms.length * 2 - 1, (index) {
-    //         if (index.isEven) {
-    //           final itemIndex = index ~/ 2;
-    //           return HomeCard(
-    //             pomodorroItem: poms[itemIndex],
-    //             onTap: (item) {
-    //               onCreateTapped();
-    //             },
-    //           );
-    //         } else {
-    //           return SizedBox(width: 20);
-    //         }
-    //       }),
-    //     ),
-    //   ),
-    // );
-  }
-
-  Widget _buildHomeBottomSheet(HomeState? state) {
-    return DetailsPage(pomodorroItem: state?.editingItem);
   }
 
   @override
@@ -132,8 +88,20 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void onCreateTapped() {
-    bloc.sendEvent(CreateTappedEvent());
+  void openPomBottomSheet(BuildContext context, PomodorroItem? item) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: false,
+      useSafeArea: true,
+      builder: (BuildContext context) {
+        return DetailsPage(pomodorroItem: item);
+      },
+    ).then(
+      (isSuccess) => {
+        if (isSuccess == true) {showSnackBar("Pomodorro saved successfully!")},
+      },
+    );
   }
 
   void showSnackBar(

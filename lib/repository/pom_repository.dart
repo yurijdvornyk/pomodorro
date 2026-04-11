@@ -22,20 +22,11 @@ class PomRepository {
     required int relaxationMinutes,
     required int cyclesCount,
   }) {
-    return Future.delayed(const Duration(milliseconds: 1000), () {
-      return PomodorroItem(
-        id: DateTime.now().millisecondsSinceEpoch,
-        title: title ?? "Untitled Pomodorro",
-        concentrationMinutes: concentrationMinutes,
-        relaxationMinutes: relaxationMinutes,
-        cyclesCount: cyclesCount,
-      );
-    });
-    // return _dbService.savePomodorro(
-    //   title: title,
-    //   concentrationMinutes: concentrationMinutes,
-    //   relaxationMinutes: relaxationMinutes,
-    //   cyclesCount: cyclesCount,
-    // );
+    return _dbService.savePomodorro(
+      title: title,
+      concentrationMinutes: concentrationMinutes,
+      relaxationMinutes: relaxationMinutes,
+      cyclesCount: cyclesCount,
+    );
   }
 }

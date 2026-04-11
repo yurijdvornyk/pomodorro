@@ -25,6 +25,7 @@ class PomDbService {
   }) {
     return _db
         .insertRecord("POMODORROS", {
+          'title': title,
           'concentrationMinutes': concentrationMinutes,
           'relaxationMinutes': relaxationMinutes,
           'cyclesCount': cyclesCount,

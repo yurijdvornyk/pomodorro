@@ -70,9 +70,12 @@ class _HomeCardState extends State<HomeCard> {
                 fontWeight: FontWeight.w400,
                 color: _isFocused ? Colors.white : Colors.black,
               ),
-              child: Text(
-                widget.pomodorroItem.title,
-                textAlign: TextAlign.center,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.pomodorroItem.title,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

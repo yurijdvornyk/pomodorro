@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
+import 'package:pomodorro/presentation/edit/details_page.dart';
 
 import 'home/home_page.dart';
 
@@ -20,10 +21,8 @@ class PomodorroApp extends StatelessWidget {
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             ),
-            initialRoute: '/',
-            routes: {
-              '/': (context) => HomePage(),
-            },
+            initialRoute: AppRoute.home.routeName,
+            routes: appRoutingMap,
           );
         } else {
           return Center(child: CircularProgressIndicator());
@@ -32,3 +31,21 @@ class PomodorroApp extends StatelessWidget {
     );
   }
 }
+
+enum AppRoute { home, details }
+
+extension AppRouteName on AppRoute {
+  String get routeName {
+    switch (this) {
+      case AppRoute.home:
+        return '/';
+      case AppRoute.details:
+        return '/details';
+    }
+  }
+}
+
+Map<String, Widget Function(BuildContext)> get appRoutingMap => {
+  AppRoute.home.routeName: (context) => HomePage(),
+  AppRoute.details.routeName: (context) => DetailsPage(),
+};

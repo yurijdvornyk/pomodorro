@@ -18,23 +18,14 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
 
   @override
   void onEvent(HomeEvent event) {
-    if (event is ItemTappedEvent) {
-      emitState(
-        currentState.copyWith(editingItem: event.item),
-      );
-    } else if (event is CreateTappedEvent) {
-      emitState(currentState.copyWith(editingItem: null));
-    }
   }
 }
 
 class HomeState {
-  final PomodorroItem? editingItem;
   final List<PomodorroItem> pomodorros;
 
   const HomeState({
     this.pomodorros = const [],
-    this.editingItem,
   });
 
   HomeState copyWith({
@@ -42,18 +33,9 @@ class HomeState {
     List<PomodorroItem>? pomodorros,
   }) {
     return HomeState(
-      editingItem: editingItem ?? this.editingItem,
       pomodorros: pomodorros ?? this.pomodorros,
     );
   }
 }
 
 abstract class HomeEvent {}
-
-class ItemTappedEvent implements HomeEvent {
-  final PomodorroItem item;
-
-  ItemTappedEvent({required this.item});
-}
-
-class CreateTappedEvent implements HomeEvent {}
