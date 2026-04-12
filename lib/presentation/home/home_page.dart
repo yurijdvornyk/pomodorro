@@ -121,7 +121,11 @@ class _HomePageState extends State<HomePage> {
       },
     ).then(
       (isSuccess) => {
-        if (isSuccess == true) {showSnackBar("Pomodorro saved successfully!")},
+        if (isSuccess == true)
+          {
+            bloc.sendEvent(RefreshEvent()),
+            showSnackBar("Pomodorro saved successfully!"),
+          },
       },
     );
   }
