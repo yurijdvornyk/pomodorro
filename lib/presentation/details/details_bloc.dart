@@ -15,12 +15,14 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
   EditState get initialState =>
       _editingItem != null
           ? EditState(
+            mode: DetailsMode.edit,
+            id: _editingItem.id,
             title: _editingItem.title,
             concentration: _editingItem.concentrationMinutes,
             relax: _editingItem.relaxationMinutes,
             cycles: _editingItem.cyclesCount,
           )
-          : EditState();
+          : EditState(mode: DetailsMode.create);
 
   @override
   void onEvent(EditEvent event) {
@@ -43,11 +45,11 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
             )
             .then(
               (savedItem) => emitState(currentState.copyWith(
+                id: savedItem.id,
                 title: savedItem.title,
                 concentration: savedItem.concentrationMinutes,
                 relax: savedItem.relaxationMinutes,
                 cycles: savedItem.cyclesCount,
-                isSaved: true,
               )),
             );
       } else {
@@ -89,34 +91,34 @@ class SaveEvent implements EditEvent {}
 
 class EditState {
   final DetailsMode mode;
+  final int? id;
   final String? title;
   final int concentration;
   final int relax;
   final int cycles;
-  final bool isSaved;
 
   EditState({
     this.mode = DetailsMode.create,
+    this.id,
     this.title,
     this.concentration = 25,
     this.relax = 5,
     this.cycles = 2,
-    this.isSaved = false,
   });
 
   EditState copyWith({
+    int? id,
     String? title,
     int? concentration,
     int? relax,
     int? cycles,
-    bool? isSaved,
   }) {
     return EditState(
+      id: id ?? this.id,
       title: title ?? this.title,
       concentration: concentration ?? this.concentration,
       relax: relax ?? this.relax,
       cycles: cycles ?? this.cycles,
-      isSaved: isSaved ?? this.isSaved,
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:pomodorro/model/pom_mappable.dart';
 
 class PomodorroItem implements PomMappable {
-  final int id;
+  final int? id;
   final String title;
   final int concentrationMinutes;
   final int relaxationMinutes;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pomodorro/common/constants.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
@@ -19,12 +20,17 @@ class _DetailsPageState extends State<DetailsPage> {
 
   late TextEditingController titleController;
 
+  final FocusNode focusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
     bloc = PomDependencyInjector.instance.detailsBloc(widget.pomodorroItem);
-    titleController = TextEditingController();
+    titleController = TextEditingController(text: widget.pomodorroItem?.title);
     bloc.start();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusNode.requestFocus();
+    });
   }
 
   @override
@@ -35,15 +41,19 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: bloc.stateStream,
-      initialData: bloc.currentState,
-      builder: (context, snapshot) {
-        final state = snapshot.data;
-        return state != null
-            ? _buildEditPomWidget(state)
-            : SizedBox(width: 0.0, height: 0.0);
-      },
+    return KeyboardListener(
+      focusNode: focusNode,
+      onKeyEvent: (event) => handleKeyEvent(event),
+      child: StreamBuilder(
+        stream: bloc.stateStream,
+        initialData: bloc.currentState,
+        builder: (context, snapshot) {
+          final state = snapshot.data;
+          return state != null
+              ? _buildEditPomWidget(state)
+              : Container();
+        },
+      ),
     );
   }
 
@@ -56,7 +66,7 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Row(
               children: [
                 IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => showCancelDialog(context, state.mode),
                   icon: Icon(Icons.arrow_back),
                 ),
                 Spacer(),
@@ -151,14 +161,7 @@ class _DetailsPageState extends State<DetailsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    if (state.title?.isNotEmpty == true) {
-                      bloc.sendEvent(SaveEvent());
-                      closeDetailsPage(context, true);
-                    } else {
-                      null;
-                    }
-                  },
+                  onPressed: () => onSaveClicked(state),
                   child: Text(
                     state.mode == DetailsMode.create ? 'Create' : 'Save',
                   ),
@@ -201,7 +204,35 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
+  void onSaveClicked(EditState state) {
+    if (state.title?.isNotEmpty == true) {
+      bloc.sendEvent(SaveEvent());
+      closeDetailsPage(context, true);
+    } else {
+      null;
+    }
+  }
+
   void closeDetailsPage(BuildContext context, bool isSuccess) {
-    Navigator.of(context).popUntilWithResult(ModalRoute.withName('/'), isSuccess);
+    Navigator.of(
+      context,
+    ).popUntilWithResult(ModalRoute.withName('/'), isSuccess);
+  }
+
+  void handleKeyEvent(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      switch (event.logicalKey) {
+        case LogicalKeyboardKey.escape:
+          showCancelDialog(context, bloc.currentState.mode);
+          break;
+        case LogicalKeyboardKey.enter:
+          if (bloc.currentState.title?.isNotEmpty == true) {
+            bloc.sendEvent(SaveEvent());
+            closeDetailsPage(context, true);
+          }
+          break;
+        default:
+      }
+    }
   }
 }
