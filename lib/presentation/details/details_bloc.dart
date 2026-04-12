@@ -38,6 +38,7 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
       if (currentState.title != null) {
         _repository
             .savePomodorro(
+              id: currentState.id,
               title: currentState.title,
               concentrationMinutes: currentState.concentration,
               relaxationMinutes: currentState.relax,
@@ -107,6 +108,7 @@ class EditState {
   });
 
   EditState copyWith({
+    DetailsMode? mode,
     int? id,
     String? title,
     int? concentration,
@@ -114,6 +116,7 @@ class EditState {
     int? cycles,
   }) {
     return EditState(
+      mode: mode ?? this.mode,
       id: id ?? this.id,
       title: title ?? this.title,
       concentration: concentration ?? this.concentration,

@@ -18,18 +18,24 @@ class PomDbService {
   }
 
   Future<PomodorroItem> savePomodorro({
+    int? id,
     String? title,
     required int concentrationMinutes,
     required int relaxationMinutes,
     required int cyclesCount,
   }) {
     return _db
-        .insertRecord("POMODORROS", {
-          'title': title,
-          'concentrationMinutes': concentrationMinutes,
-          'relaxationMinutes': relaxationMinutes,
-          'cyclesCount': cyclesCount,
-        })
+        .insertRecord(
+          "POMODORROS",
+          {
+            'id': id,
+            'title': title,
+            'concentrationMinutes': concentrationMinutes,
+            'relaxationMinutes': relaxationMinutes,
+            'cyclesCount': cyclesCount,
+          },
+          PomDbConflictAlgorithm.replace,
+        )
         .then((id) {
           return PomodorroItem(
             id: id,

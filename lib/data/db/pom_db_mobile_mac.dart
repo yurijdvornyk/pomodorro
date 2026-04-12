@@ -109,11 +109,20 @@ class PomDbMobile implements PomDb {
   Future<int> insertRecord(
     String tableName,
     Map<String, Object?> values,
+    PomDbConflictAlgorithm conflictAlgorithm,
   ) async {
     try {
       final columns = values.keys.join(', ');
       final placeholders = List.filled(values.length, '?').join(', ');
-      final query = 'INSERT INTO $tableName ($columns) VALUES ($placeholders)';
+      final String prefix;
+      if (conflictAlgorithm == PomDbConflictAlgorithm.replace) {
+        prefix = "INSERT";
+      } else if (conflictAlgorithm == PomDbConflictAlgorithm.replace) {
+        prefix = "INSERT OR REPLACE";
+      } else {
+        return -1;
+      }
+      final query = '$prefix INTO $tableName ($columns) VALUES ($placeholders)';
       _db?.execute(query, values.values.toList());
       return _db?.lastInsertRowId ?? 0;
     } catch (e) {

@@ -71,7 +71,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
                 Spacer(),
                 Text(
-                  widget.pomodorroItem == null
+                  state.mode == DetailsMode.create
                       ? "Create pomodorro"
                       : "Edit pomodorro",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

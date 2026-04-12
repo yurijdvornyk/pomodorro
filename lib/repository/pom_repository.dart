@@ -13,35 +13,18 @@ class PomRepository {
   }
 
   Future<List<PomodorroItem>> fetchPomodorros() {
-    // return _dbService.getPomodorros();
-    return Future.delayed(
-      Duration(seconds: 1),
-      () => [
-        PomodorroItem(
-          id: 1,
-          title: "Study Session",
-          concentrationMinutes: 25,
-          relaxationMinutes: 5,
-          cyclesCount: 4,
-        ),
-        PomodorroItem(
-          id: 2,
-          title: "Work Session",
-          concentrationMinutes: 50,
-          relaxationMinutes: 10,
-          cyclesCount: 2,
-        ),
-      ],
-    );
+    return _dbService.getPomodorros();
   }
 
   Future<PomodorroItem> savePomodorro({
+    int? id,
     String? title,
     required int concentrationMinutes,
     required int relaxationMinutes,
     required int cyclesCount,
   }) {
     return _dbService.savePomodorro(
+      id: id,
       title: title,
       concentrationMinutes: concentrationMinutes,
       relaxationMinutes: relaxationMinutes,

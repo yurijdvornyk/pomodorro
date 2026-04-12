@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/details/details_page.dart';
@@ -11,6 +12,8 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+class _RefreshIntent extends Intent {}
 
 class _HomePageState extends State<HomePage> {
   final HomeBloc bloc = PomDependencyInjector.instance.homeBloc;
@@ -25,43 +28,42 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<HomeState>(
-      stream: bloc.stateStream,
-      builder: (context, snapshot) {
-        final state = snapshot.data;
-        return Scaffold(
-          appBar: AppBar(title: Text("Home")),
-          body: SafeArea(
-            child: Center(
-              child:
-                  state == null
-                      ? CircularProgressIndicator()
-                      : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (state.pomodorros.isEmpty) ...[
-                              Text("No pomodorros. Let's create one!"),
-                            ] else ...[
-                              _buildPomsList(state),
+    return buildKeyboardShortcutWrapper(
+      StreamBuilder<HomeState>(
+        stream: bloc.stateStream,
+        builder: (context, snapshot) {
+          final state = snapshot.data;
+          return Scaffold(
+            appBar: AppBar(title: Text("Home")),
+            body: SafeArea(
+              child: Center(
+                child:
+                    state == null || state.isLoading
+                        ? CircularProgressIndicator()
+                        : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (state.pomodorros.isEmpty) ...[
+                                Text("No pomodorros. Let's create one!"),
+                              ] else ...[
+                                _buildPomsList(state),
+                              ],
+                              SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  openPomBottomSheet(context, null);
+                                },
+                                child: Text("Create Pomodorro"),
+                              ),
                             ],
-                            SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () {
-                                openPomBottomSheet(
-                                  context,
-                                  null,
-                                );
-                              },
-                              child: Text("Create Pomodorro"),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -86,6 +88,26 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     bloc.dispose();
     super.dispose();
+  }
+
+  Widget buildKeyboardShortcutWrapper(Widget child) {
+    return Shortcuts(
+      shortcuts: {
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyR):
+            _RefreshIntent(),
+      },
+      child: Actions(
+        actions: {
+          _RefreshIntent: CallbackAction<_RefreshIntent>(
+            onInvoke: (intent) {
+              bloc.sendEvent(RefreshEvent());
+              return null;
+            },
+          ),
+        },
+        child: Focus(autofocus: true, child: child),
+      ),
+    );
   }
 
   void openPomBottomSheet(BuildContext context, PomodorroItem? item) {

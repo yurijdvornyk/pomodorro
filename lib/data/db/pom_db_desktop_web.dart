@@ -49,8 +49,17 @@ class PomDbDesktopWeb implements PomDb {
   Future<int> insertRecord(
     String tableName,
     Map<String, Object?> values,
+    PomDbConflictAlgorithm conflictAlgorithm,
   ) async {
-    return await database.insert(tableName, values);
+    return await database.insert(
+      tableName,
+      values,
+      conflictAlgorithm: conflictAlgorithm == PomDbConflictAlgorithm.replace
+          ? ConflictAlgorithm.replace
+          : conflictAlgorithm == PomDbConflictAlgorithm.error
+              ? ConflictAlgorithm.fail
+              : ConflictAlgorithm.ignore,
+    );
   }
 
   @override
@@ -94,10 +103,6 @@ class PomDbDesktopWeb implements PomDb {
     String? where,
     List<Object?>? whereArgs,
   }) async {
-    return await database.query(
-      tableName,
-      where: where,
-      whereArgs: whereArgs,
-    );
+    return await database.query(tableName, where: where, whereArgs: whereArgs);
   }
 }

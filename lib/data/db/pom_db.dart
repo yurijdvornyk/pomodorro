@@ -21,7 +21,11 @@ abstract class PomDb {
     List<Object?>? whereArgs,
   });
 
-  Future<int> insertRecord(String tableName, Map<String, Object?> values);
+  Future<int> insertRecord(
+    String tableName,
+    Map<String, Object?> values,
+    PomDbConflictAlgorithm conflictAlgorithm,
+  );
 
   Future<void> updateRecords(
     String tableName,
@@ -51,3 +55,5 @@ PomDb _getInstance() {
   }
   return _instance!;
 }
+
+enum PomDbConflictAlgorithm { replace, error, ignore }
