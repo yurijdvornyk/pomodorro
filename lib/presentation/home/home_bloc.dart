@@ -18,7 +18,7 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
   void onEvent(HomeEvent event) {
     if (event is RefreshEvent) {
       emitState(currentState.copyWith(isLoading: true));
-      Future.delayed(Duration(milliseconds: 100)).then(
+      Future.delayed(Duration(milliseconds: 2000)).then(
         (_) => _repository.fetchPomodorros().then(
           (poms) => emitState(HomeState(isLoading: false, pomodorros: poms)),
         ),

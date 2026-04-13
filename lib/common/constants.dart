@@ -10,4 +10,9 @@ class PomConstants {
   static const cyclesMin = 1;
   static const cyclesMax = 10;
   static const cyclesStep = 1;
+
+  static const homeCardWidth = 200.0;
+  static const homeCardHeight = 200.0;
+
+  static const borderRadius = 32.0;
 }

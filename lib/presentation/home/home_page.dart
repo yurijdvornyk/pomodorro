@@ -15,14 +15,24 @@ class HomePage extends StatefulWidget {
 
 class _RefreshIntent extends Intent {}
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   final HomeBloc bloc = PomDependencyInjector.instance.homeBloc;
 
   final CarouselController pomsController = CarouselController();
 
+  late AnimationController loadAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500))..repeat(reverse: true);
+
+  late Animation<double> loadAnimation;
+
   @override
   void initState() {
     super.initState();
+    loadAnimation = Tween<double>(begin: 0.2, end: 0.8).animate(
+      CurvedAnimation(
+        parent: loadAnimationController,
+        curve: Curves.easeInOut,
+      ),
+    );
     bloc.start();
   }
 
@@ -39,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child:
                     state == null || state.isLoading
-                        ? CircularProgressIndicator()
+                        ? _buildLoadingState()
                         : Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -87,6 +97,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     bloc.dispose();
+    loadAnimationController.dispose();
     super.dispose();
   }
 
@@ -100,7 +111,7 @@ class _HomePageState extends State<HomePage> {
         actions: {
           _RefreshIntent: CallbackAction<_RefreshIntent>(
             onInvoke: (intent) {
-              bloc.sendEvent(RefreshEvent());
+              loadData();
               return null;
             },
           ),
@@ -123,7 +134,7 @@ class _HomePageState extends State<HomePage> {
       (isSuccess) => {
         if (isSuccess == true)
           {
-            bloc.sendEvent(RefreshEvent()),
+            loadData(),
             showSnackBar("Pomodorro saved successfully!"),
           },
       },
@@ -138,5 +149,36 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(message), duration: duration));
+  }
+
+  void loadData() {
+    bloc.sendEvent(RefreshEvent());
+  }
+
+  Widget _buildLoadingState() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 200.0,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            children: [
+              HomeCardPlaceholder(opacityController: loadAnimationController),
+              SizedBox(width: 16),
+              HomeCardPlaceholder(opacityController: loadAnimationController),
+              SizedBox(width: 16),
+              HomeCardPlaceholder(opacityController: loadAnimationController),
+            ],
+          ),
+        ),
+        SizedBox(height: 20),
+        Opacity(
+          opacity: 0.0,
+          child: ElevatedButton(onPressed: () {}, child: Text("")),
+        ),
+      ],
+    );
   }
 }

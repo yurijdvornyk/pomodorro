@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomodorro/common/constants.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
 
 class HomeCard extends StatefulWidget {
@@ -36,11 +37,11 @@ class _HomeCardState extends State<HomeCard> {
           child: AnimatedContainer(
             duration: Duration(milliseconds: widget.animationDuration),
             curve: Curves.easeInOut,
-            width: 200,
-            height: 200,
+            width: PomConstants.homeCardWidth,
+            height: PomConstants.homeCardHeight,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(PomConstants.borderRadius),
               // We switch between a solid grey and the linear gradient
               gradient:
                   _isFocused
@@ -79,6 +80,27 @@ class _HomeCardState extends State<HomeCard> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeCardPlaceholder extends StatelessWidget {
+  const HomeCardPlaceholder({super.key, required this.opacityController});
+
+  final AnimationController opacityController; // value between 0.0 and 1.0
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: opacityController,
+      child: Container(
+        width: PomConstants.homeCardWidth,
+        height: PomConstants.homeCardHeight,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(PomConstants.borderRadius),
         ),
       ),
     );
