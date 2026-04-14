@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/presentation/details/details_page.dart';
+import 'package:pomodorro/presentation/play/play_page.dart';
 
 import 'home/home_page.dart';
 
@@ -32,7 +33,7 @@ class PomodorroApp extends StatelessWidget {
   }
 }
 
-enum AppRoute { home, details }
+enum AppRoute { home, details, play }
 
 extension AppRouteName on AppRoute {
   String get routeName {
@@ -41,6 +42,8 @@ extension AppRouteName on AppRoute {
         return '/';
       case AppRoute.details:
         return '/details';
+      case AppRoute.play:
+        return '/play';
     }
   }
 }
@@ -48,4 +51,5 @@ extension AppRouteName on AppRoute {
 Map<String, Widget Function(BuildContext)> get appRoutingMap => {
   AppRoute.home.routeName: (context) => HomePage(),
   AppRoute.details.routeName: (context) => DetailsPage(),
+  AppRoute.play.routeName: (context) => PlayPage(),
 };

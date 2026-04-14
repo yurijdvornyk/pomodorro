@@ -3,7 +3,7 @@ import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/base_bloc.dart';
 import 'package:pomodorro/repository/pom_repository.dart';
 
-class DetailsBloc extends PBloc<EditState, EditEvent> {
+class DetailsBloc extends PBloc<EditState, DetailsEvent> {
   final PomRepository _repository =
       PomDependencyInjector.instance.pomRepository;
 
@@ -25,7 +25,7 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
           : EditState(mode: DetailsMode.create);
 
   @override
-  void onEvent(EditEvent event) {
+  void onEvent(DetailsEvent event) {
     if (event is UpdateTitleEvent) {
       emitState(currentState.copyWith(title: event.title));
     } else if (event is UpdateConcentrationEvent) {
@@ -62,33 +62,33 @@ class DetailsBloc extends PBloc<EditState, EditEvent> {
 
 enum DetailsMode { create, edit }
 
-abstract class EditEvent {}
+abstract class DetailsEvent {}
 
-class UpdateTitleEvent implements EditEvent {
+class UpdateTitleEvent implements DetailsEvent {
   final String title;
 
   UpdateTitleEvent(this.title);
 }
 
-class UpdateConcentrationEvent implements EditEvent {
+class UpdateConcentrationEvent implements DetailsEvent {
   final int concentration;
 
   UpdateConcentrationEvent(this.concentration);
 }
 
-class UpdateRelaxEvent implements EditEvent {
+class UpdateRelaxEvent implements DetailsEvent {
   final int relax;
 
   UpdateRelaxEvent(this.relax);
 }
 
-class UpdateCyclesEvent implements EditEvent {
+class UpdateCyclesEvent implements DetailsEvent {
   final int cycles;
 
   UpdateCyclesEvent(this.cycles);
 }
 
-class SaveEvent implements EditEvent {}
+class SaveEvent implements DetailsEvent {}
 
 class EditState {
   final DetailsMode mode;
@@ -124,4 +124,6 @@ class EditState {
       cycles: cycles ?? this.cycles,
     );
   }
+
+  bool get isPlayable => id != null && title?.isNotEmpty == true;
 }

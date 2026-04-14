@@ -44,21 +44,24 @@ class _DetailsPageState extends State<DetailsPage> {
     return KeyboardListener(
       focusNode: focusNode,
       onKeyEvent: (event) => handleKeyEvent(event),
-      child: StreamBuilder(
-        stream: bloc.stateStream,
-        initialData: bloc.currentState,
-        builder: (context, snapshot) {
-          final state = snapshot.data;
-          return state != null
-              ? _buildEditPomWidget(state)
-              : Container();
-        },
-      ),
+      child: 
+          StreamBuilder(
+            stream: bloc.stateStream,
+            initialData: bloc.currentState,
+            builder: (context, snapshot) {
+              final state = snapshot.data;
+              return state != null ? _buildEditPomWidget(state) : Container();
+            },
+          ),
+          
     );
   }
 
   Widget _buildEditPomWidget(EditState state) {
-    return SingleChildScrollView(
+    return Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: [ SingleChildScrollView(
       child: Column(
         children: [
           Padding(
@@ -179,7 +182,21 @@ class _DetailsPageState extends State<DetailsPage> {
           ),
         ],
       ),
-    );
+    ),
+    Positioned(
+            top: -30,
+            child: FloatingActionButton(
+              shape: RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.circular(28),
+              ),
+              onPressed: () {
+                onPlayClicked(state);
+              },
+              child: Icon(Icons.play_arrow_rounded),
+            ),
+          ),
+        ],
+      );
   }
 
   Future<void> showCancelDialog(BuildContext context, DetailsMode mode) {
@@ -195,7 +212,7 @@ class _DetailsPageState extends State<DetailsPage> {
               child: Text("Cancel"),
             ),
             TextButton(
-              onPressed: () => closeDetailsPage(context, false),
+              onPressed: () => closeDetailsPage(context, PomodorroSavedResult(isSaved: false)),
               child: Text("Discard"),
             ),
           ],
@@ -207,16 +224,23 @@ class _DetailsPageState extends State<DetailsPage> {
   void onSaveClicked(EditState state) {
     if (state.title?.isNotEmpty == true) {
       bloc.sendEvent(SaveEvent());
-      closeDetailsPage(context, true);
+      closeDetailsPage(context, PomodorroSavedResult(isSaved: true));
     } else {
       null;
     }
   }
 
-  void closeDetailsPage(BuildContext context, bool isSuccess) {
-    Navigator.of(
-      context,
-    ).popUntilWithResult(ModalRoute.withName('/'), isSuccess);
+  void onPlayClicked(EditState state) {
+    if (state.isPlayable) {
+      Navigator.of(context).popUntilWithResult(
+        ModalRoute.withName('/'),
+        PlayPomodorroResult(pomodorroId: state.id),
+      );
+    }
+  }
+
+  void closeDetailsPage(BuildContext context, DetailsPageResult result) {
+    Navigator.of(context).popUntilWithResult(ModalRoute.withName('/'), result);
   }
 
   void handleKeyEvent(KeyEvent event) {
@@ -228,11 +252,25 @@ class _DetailsPageState extends State<DetailsPage> {
         case LogicalKeyboardKey.enter:
           if (bloc.currentState.title?.isNotEmpty == true) {
             bloc.sendEvent(SaveEvent());
-            closeDetailsPage(context, true);
+            closeDetailsPage(context, PomodorroSavedResult(isSaved: true));
           }
           break;
         default:
       }
     }
   }
+}
+
+abstract class DetailsPageResult {}
+
+class PomodorroSavedResult implements DetailsPageResult {
+  final bool isSaved;
+
+  PomodorroSavedResult({required this.isSaved});
+}
+
+class PlayPomodorroResult implements DetailsPageResult {
+  final int? pomodorroId;
+
+  PlayPomodorroResult({this.pomodorroId});
 }

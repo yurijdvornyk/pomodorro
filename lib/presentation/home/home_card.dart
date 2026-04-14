@@ -89,7 +89,7 @@ class _HomeCardState extends State<HomeCard> {
 class HomeCardPlaceholder extends StatelessWidget {
   const HomeCardPlaceholder({super.key, required this.opacityController});
 
-  final AnimationController opacityController; // value between 0.0 and 1.0
+  final AnimationController opacityController;
 
   @override
   Widget build(BuildContext context) {

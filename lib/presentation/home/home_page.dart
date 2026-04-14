@@ -5,6 +5,7 @@ import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/details/details_page.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
 import 'package:pomodorro/presentation/home/home_card.dart';
+import 'package:pomodorro/presentation/pomodorro_app.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   void openPomBottomSheet(BuildContext context, PomodorroItem? item) {
-    showModalBottomSheet(
+    showModalBottomSheet<DetailsPageResult>(
       context: context,
       isScrollControlled: true,
       isDismissible: false,
@@ -131,12 +132,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         return DetailsPage(pomodorroItem: item);
       },
     ).then(
-      (isSuccess) => {
-        if (isSuccess == true)
-          {
+      (result) => {
+        if (result is PomodorroSavedResult && result.isSaved) {
             loadData(),
             showSnackBar("Pomodorro saved successfully!"),
-          },
+          } else if (result is PlayPomodorroResult) {
+            loadData(),
+            playPomodorro(result.pomodorroId)
+          }
       },
     );
   }
@@ -153,6 +156,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   void loadData() {
     bloc.sendEvent(RefreshEvent());
+  }
+
+  void playPomodorro(int? pomodorroId) {
+    Navigator.of(context).pushNamed(AppRoute.play.routeName, arguments: pomodorroId);
   }
 
   Widget _buildLoadingState() {
