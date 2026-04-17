@@ -5,30 +5,33 @@ import 'package:pomodorro/presentation/play/play_page.dart';
 
 import 'home/home_page.dart';
 
-class PomodorroApp extends StatelessWidget {
-  PomodorroApp({super.key});
+class PomodorroApp extends StatefulWidget {
+  const PomodorroApp({super.key});
 
-  final PomDependencyInjector _injector = PomDependencyInjector();
+  @override
+  State<StatefulWidget> createState() {
+    return _State();
+  }
+}
+
+class _State extends State<PomodorroApp> {
+  final pomRepository = PomDependencyInjector.instance.pomRepository;
+
+  @override
+  void initState() {
+    super.initState();
+    pomRepository.initializeDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final pomRepository = _injector.pomRepository;
-    return FutureBuilder(
-      future: pomRepository.initializeDatabase(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-            title: 'Pomodorro',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            ),
-            initialRoute: AppRoute.home.routeName,
-            routes: appRoutingMap,
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
+    return MaterialApp(
+      title: 'Pomodorro',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      initialRoute: AppRoute.home.routeName,
+      routes: appRoutingMap,
     );
   }
 }
