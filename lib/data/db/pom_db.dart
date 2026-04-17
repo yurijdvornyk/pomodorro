@@ -13,7 +13,7 @@ abstract class PomDb {
 
   Future<void> initialize();
 
-  Future<Object?> findRecordById(String tableName, int id);
+  Future<Map<String, Object?>?> findRecordById(String tableName, int id);
 
   Future<List<Map<String, Object?>>> getRecords(
     String tableName, {

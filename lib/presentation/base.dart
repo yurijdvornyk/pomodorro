@@ -1,20 +1,20 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
-abstract class PBloc<State, Event> {
-  final StreamController<State> _stateController = StreamController<State>();
+abstract class PBloc<PState, Event> {
+  final StreamController<PState> _stateController = StreamController<PState>();
 
   final StreamController<Event> _eventController = StreamController<Event>();
 
-  Stream<State> get stateStream => _stateController.stream;
+  Stream<PState> get stateStream => _stateController.stream;
 
   Stream<Event> get eventStream => _eventController.stream;
 
-  State? _currentState;
+  PState? _currentState;
 
-  State get initialState;
+  PState get initialState;
 
-  State get currentState => _currentState ?? initialState;
+  PState get currentState => _currentState ?? initialState;
 
   @mustCallSuper
   void start() {
@@ -24,7 +24,7 @@ abstract class PBloc<State, Event> {
 
   void onEvent(Event event);
 
-  void emitState(State state) {
+  void emitState(PState state) {
     _currentState = state;
     _stateController.sink.add(state);
   }
@@ -37,5 +37,15 @@ abstract class PBloc<State, Event> {
   void dispose() {
     _stateController.close();
     _eventController.close();
+  }
+}
+
+extension PageArgumentGetter on State {
+  T? getArgument<T>() {
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is T) {
+      return args;
+    }
+    return null;
   }
 }

@@ -4,14 +4,14 @@ class PomodorroItem implements PomMappable {
   final int? id;
   final String title;
   final int concentrationMinutes;
-  final int relaxationMinutes;
+  final int relaxMinutes;
   final int cyclesCount;
 
   const PomodorroItem({
     required this.id,
     required this.title,
     this.concentrationMinutes = 25,
-    this.relaxationMinutes = 5,
+    this.relaxMinutes = 5,
     this.cyclesCount = 4,
   });
 
@@ -19,14 +19,14 @@ class PomodorroItem implements PomMappable {
     int? id,
     String? title,
     int? concentrationMinutes,
-    int? relaxationMinutes,
+    int? relaxMinutes,
     int? cyclesCount,
   }) {
     return PomodorroItem(
       id: id ?? this.id,
       title: title ?? this.title,
       concentrationMinutes: concentrationMinutes ?? this.concentrationMinutes,
-      relaxationMinutes: relaxationMinutes ?? this.relaxationMinutes,
+      relaxMinutes: relaxMinutes ?? this.relaxMinutes,
       cyclesCount: cyclesCount ?? this.cyclesCount,
     );
   }
@@ -37,7 +37,7 @@ class PomodorroItem implements PomMappable {
       'id': id,
       'title': title,
       'concentrationMinutes': concentrationMinutes,
-      'relaxationMinutes': relaxationMinutes,
+      'relaxationMinutes': relaxMinutes,
       'cyclesCount': cyclesCount,
     };
   }
@@ -48,7 +48,7 @@ class PomodorroItem implements PomMappable {
       id: map['id'] as int,
       title: map['title'] as String,
       concentrationMinutes: map['concentrationMinutes'] as int,
-      relaxationMinutes: map['relaxationMinutes'] as int,
+      relaxMinutes: map['relaxationMinutes'] as int,
       cyclesCount: map['cyclesCount'] as int,
     );
   }

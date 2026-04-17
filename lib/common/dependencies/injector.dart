@@ -2,6 +2,7 @@ import 'package:pomodorro/data/service/pom_db_service.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
 import 'package:pomodorro/presentation/details/details_bloc.dart';
 import 'package:pomodorro/presentation/home/home_bloc.dart';
+import 'package:pomodorro/presentation/play/play_bloc.dart';
 import 'package:pomodorro/repository/pom_repository.dart';
 
 class PomDependencyInjector {
@@ -22,6 +23,8 @@ class PomDependencyInjector {
   HomeBloc get homeBloc => HomeBloc();
   
   DetailsBloc detailsBloc(PomodorroItem? pomItem) => DetailsBloc(editingItem: pomItem);
+
+  PlayBloc get playBloc => PlayBloc();
 
   late final PomRepository pomRepository;
 

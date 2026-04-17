@@ -1,5 +1,5 @@
 import 'package:pomodorro/common/dependencies/injector.dart';
-import 'package:pomodorro/presentation/base_bloc.dart';
+import 'package:pomodorro/presentation/base.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
 
 class HomeBloc extends PBloc<HomeState, HomeEvent> {
@@ -18,10 +18,8 @@ class HomeBloc extends PBloc<HomeState, HomeEvent> {
   void onEvent(HomeEvent event) {
     if (event is RefreshEvent) {
       emitState(currentState.copyWith(isLoading: true));
-      Future.delayed(Duration(milliseconds: 2000)).then(
-        (_) => _repository.fetchPomodorros().then(
-          (poms) => emitState(HomeState(isLoading: false, pomodorros: poms)),
-        ),
+      _repository.fetchPomodorros().then(
+        (poms) => emitState(HomeState(isLoading: false, pomodorros: poms)),
       );
     }
   }

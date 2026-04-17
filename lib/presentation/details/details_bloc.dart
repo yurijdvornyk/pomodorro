@@ -1,6 +1,6 @@
 import 'package:pomodorro/common/dependencies/injector.dart';
 import 'package:pomodorro/model/pomodorro_item.dart';
-import 'package:pomodorro/presentation/base_bloc.dart';
+import 'package:pomodorro/presentation/base.dart';
 import 'package:pomodorro/repository/pom_repository.dart';
 
 class DetailsBloc extends PBloc<EditState, DetailsEvent> {
@@ -19,7 +19,7 @@ class DetailsBloc extends PBloc<EditState, DetailsEvent> {
             id: _editingItem.id,
             title: _editingItem.title,
             concentration: _editingItem.concentrationMinutes,
-            relax: _editingItem.relaxationMinutes,
+            relax: _editingItem.relaxMinutes,
             cycles: _editingItem.cyclesCount,
           )
           : EditState(mode: DetailsMode.create);
@@ -49,7 +49,7 @@ class DetailsBloc extends PBloc<EditState, DetailsEvent> {
                 id: savedItem.id,
                 title: savedItem.title,
                 concentration: savedItem.concentrationMinutes,
-                relax: savedItem.relaxationMinutes,
+                relax: savedItem.relaxMinutes,
                 cycles: savedItem.cyclesCount,
               )),
             );

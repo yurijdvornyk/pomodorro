@@ -87,8 +87,8 @@ class PomDbDesktopWeb implements PomDb {
   }
 
   @override
-  Future<Object?> findRecordById(String tableName, int id) async {
-    List<Object> records = await database.query(
+  Future<Map<String, Object?>?> findRecordById(String tableName, int id) async {
+    final List<Map<String, Object?>> records = await database.query(
       tableName,
       where: 'id = ?',
       whereArgs: [id],

@@ -41,9 +41,15 @@ class PomDbService {
             id: id,
             title: title ?? "",
             concentrationMinutes: concentrationMinutes,
-            relaxationMinutes: relaxationMinutes,
+            relaxMinutes: relaxationMinutes,
             cyclesCount: cyclesCount,
           );
         });
+  }
+
+  Future<PomodorroItem?> getPomodorroById(int id) {
+    return _db
+        .findRecordById("POMODORROS", id)
+        .then((record) => record != null ? PomodorroItem.fromMap(record) : null);
   }
 }

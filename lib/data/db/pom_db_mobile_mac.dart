@@ -62,12 +62,18 @@ class PomDbMobile implements PomDb {
   }
 
   @override
-  Future<Object?> findRecordById(String tableName, int id) async {
+  Future<Map<String, Object?>?> findRecordById(String tableName, int id) async {
     try {
       final query = 'SELECT * FROM $tableName WHERE id = ? LIMIT 1';
       final resultSet = _db?.select(query, [id]);
       if (resultSet != null && resultSet.isNotEmpty) {
-        return resultSet.first;
+        final Map<String, Object?> result = <String, Object?>{};
+        for (int i = 0; i < resultSet.first.keys.length; i++) {
+          result.putIfAbsent(resultSet.first.keys[i], () => resultSet.first.values[i]);
+        }
+        return result;
+      } else {
+        return null;
       }
     } catch (e) {
       _catchDbError(e);
