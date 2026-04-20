@@ -54,9 +54,10 @@ class PomDbDesktopWeb implements PomDb {
     return await database.insert(
       tableName,
       values,
-      conflictAlgorithm: conflictAlgorithm == PomDbConflictAlgorithm.replace
-          ? ConflictAlgorithm.replace
-          : conflictAlgorithm == PomDbConflictAlgorithm.error
+      conflictAlgorithm:
+          conflictAlgorithm == PomDbConflictAlgorithm.replace
+              ? ConflictAlgorithm.replace
+              : conflictAlgorithm == PomDbConflictAlgorithm.error
               ? ConflictAlgorithm.fail
               : ConflictAlgorithm.ignore,
     );

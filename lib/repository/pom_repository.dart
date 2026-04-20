@@ -38,7 +38,7 @@ class PomRepository {
   }
 
   Future<PomTimeline> createPomodorroTimeline(PomodorroItem item) async {
-    final timeline = PomTimeline(sections: []);
+    final timeline = PomTimeline(pomItemId: item.id!, sections: []);
     for (int i = 0; i < item.cyclesCount; i++) {
       timeline.sections.add(
         PomTimelineSection(

@@ -50,10 +50,10 @@ class _PlayPageState extends State<PlayPage> {
                     child: CircularProgressIndicator(
                       color: Colors.white,
                       value:
-                          state != null && pomItem != null && state.isPlaying
-                              ? (state.currentPosition /
-                                  pomItem!.concentrationMinutes)
-                              : 1.0,
+                          state != null && state.isRunning
+                              ? (state.currentPositionWithinSeconds /
+                                  state.sectionDurationSeconds)
+                              : 0.0,
                       strokeWidth: 4,
                     ),
                   ),
@@ -67,6 +67,13 @@ class _PlayPageState extends State<PlayPage> {
                       bloc.sendEvent(StartPomEvent());
                     },
                   ),
+                ),
+                LinearProgressIndicator(
+                  color: Colors.white,
+                  value:
+                      state != null && state.isRunning
+                          ? (state.currentPosition / state.totalSeconds)
+                          : 0.0,
                 ),
               ],
             ),

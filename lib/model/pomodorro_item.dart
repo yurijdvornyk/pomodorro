@@ -7,6 +7,8 @@ class PomodorroItem implements PomMappable {
   final int relaxMinutes;
   final int cyclesCount;
 
+  int get totalMinutes => (concentrationMinutes + relaxMinutes) * cyclesCount;
+
   const PomodorroItem({
     required this.id,
     required this.title,

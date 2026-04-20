@@ -7,14 +7,24 @@ class PlayBloc extends PBloc<PlayState, PlayEvent> {
   PlayBloc();
 
   @override
-  PlayState get initialState => PlayState();
+  PlayState get initialState => PlayState(
+        isRunning: false,
+        currentPositionWithinSeconds: 0,
+        sectionDurationSeconds: pomItem != null
+            ? pomItem!.concentrationMinutes * 60
+            : pomItem!.totalMinutes * 60,
+        currentPosition: 0,
+        totalSeconds: pomItem != null
+            ? pomItem!.totalMinutes * 60
+            : 25 * 60,
+      );
 
   @override
   void onEvent(PlayEvent event) {
     if (event is PomodorroSetEvent) {
       pomItem = event.pomItem;
     } else if (event is StartPomEvent) {
-      emitState(currentState.copyWith(isPlaying: true));
+      emitState(currentState.copyWith(isRunning: true));
     }
   }
 }
@@ -30,15 +40,35 @@ class PomodorroSetEvent implements PlayEvent {
 class StartPomEvent implements PlayEvent {}
 
 class PlayState {
-  final bool isPlaying;
+  final bool isRunning;
+  final int currentPositionWithinSeconds;
+  final int sectionDurationSeconds;
   final int currentPosition;
+  final int totalSeconds;
 
-  PlayState({this.isPlaying = false, this.currentPosition = 0});
+  PlayState({
+    required this.isRunning,
+    required this.currentPositionWithinSeconds,
+    required this.sectionDurationSeconds,
+    required this.currentPosition,
+    required this.totalSeconds,
+  });
 
-  PlayState copyWith({bool? isPlaying, int? currentPosition}) {
+  PlayState copyWith({
+    bool? isRunning,
+    int? currentPositionWithinSeconds,
+    int? sectionDurationSeconds,
+    int? currentPosition,
+    int? totalSeconds,
+  }) {
     return PlayState(
-      isPlaying: isPlaying ?? this.isPlaying,
+      isRunning: isRunning ?? this.isRunning,
+      currentPositionWithinSeconds:
+          currentPositionWithinSeconds ?? this.currentPositionWithinSeconds,
+      sectionDurationSeconds:
+          sectionDurationSeconds ?? this.sectionDurationSeconds,
       currentPosition: currentPosition ?? this.currentPosition,
+      totalSeconds: totalSeconds ?? this.totalSeconds,
     );
   }
 }
